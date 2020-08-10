@@ -88,8 +88,6 @@ class AccountController extends FrontController
 
   public function index(): Response
   {
-
-
     $request = $this->main();
 
     if ($this->verifyUser() === false) {
