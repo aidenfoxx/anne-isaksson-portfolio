@@ -1,0 +1,79 @@
+{% extends './main.twig' %}
+{% block links %}
+  {% if slides is not empty %}
+    <a href="#portfolio" rel="nofollow" title="Portfolio">Portfolio</a>
+  {% endif %}
+  <a href="#about" rel="nofollow" title="About Me">The Artist</a>
+  <a href="#contact" rel="nofollow" title="Contact">Contact</a>
+{% endblock %}
+{% block content %}
+  {% if slides is not empty %}
+    <section id="portfolio" class="section">
+      <div class="container">
+        <div class="slider">
+          <div class="slides">
+            {% for slide in slides %}
+              <img
+                width="16"
+                height="9"
+                class="slide"
+                src="{{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_medium.{{ slide.getExtension() }}"
+                srcset="{{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_small.{{ slide.getExtension() }} 640w,
+                        {{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_medium.{{ slide.getExtension() }} 1280w"
+                title="{{ slide.getTitle() }}"
+                alt="{{ slide.getTitle() }}"
+              />
+            {% endfor %}
+          </div>
+        </div>
+        <div class="controls">
+          <span class="title"></span>
+          <a onClick="window.prevSlide()" rel="nofollow" title="Previous Slide">prev</a>/<a onClick="window.nextSlide()" rel="nofollow" title="Next Slide">next</a>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+  <section id="about" class="section">
+    <div class="container">
+      <div class="column">
+        <img src="./assets/img/about.jpg" title="Anne Isaksson" alt="Anne Isaksson" />
+      </div>
+      <div class="column">
+        <h1>Anne Isaksson, 2D/3D Artist</h1>
+        <p>My name is Anne Isaksson, an artist living in Stockholm, Sweden. In 2017 I achieved a bachelor's degree in 3D graphics from the Luleå University of Technology. I am now studying 2D game art at Future Games, Stockholm.</p>
+        <p>Since earning my degree I have worked on and off in the 3D industry (Important Looking Pirates, Swiss and Goodbye Kansas), and have actively worked as a freelance 2D artist for Staff in Motion and the Twitch streamer Scratticus Academy. I am currently the principal artist for an untitled roleplaying adventure book.</p>
+        <nav>
+          <a href="https://www.artstation.com/ambly" title="ArtStation" target="_blank">
+            <img src="{{ baseUrl }}/assets/img/icons/artstation.svg" title="ArtStation" alt="ArtStation" />
+          </a>
+          <a href="https://www.instagram.com/artambly/" title="Instagram" target="_blank">
+            <img src="{{ baseUrl }}/assets/img/icons/instagram.svg" title="Instagram" alt="Instagram" />
+          </a>
+          <a href="https://twitter.com/artAmbli" title="Twitter" target="_blank">
+            <img src="{{ baseUrl }}/assets/img/icons/twitter.svg" title="Twitter" alt="Twitter" />
+          </a>
+          <a href="https://www.linkedin.com/in/anne-isaksson/" title="LinkedIn" target="_blank">
+            <img src="{{ baseUrl }}/assets/img/icons/linkedin.svg" title="LinkedIn" alt="LinkedIn" />
+          </a>
+        </nav>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="section">
+    <div class="container">
+      <h1>Get in touch</h1>
+      <p>I'm currently seeking fulltime employment as a concept artist, illustrator, UI artist or animator. So if you're in need of a talented artist, have any questions, or just want to want to chat over coffee, do not hesitate to contact me.</p>
+      <a href="tel:+46703190933" title="Call Me" rel="nofollow">
+        <img src="{{ baseUrl }}/assets/img/icons/phone.svg" title="Call Me" alt="Call Me" />
+        <span>0703190933</span>
+      </a>
+      <a href="mailto:contact@anneisaksson.art" title="Email Me" rel="nofollow">
+        <img src="{{ baseUrl }}/assets/img/icons/mail.svg" title="Email Me" alt="Email Me" />
+        <span>contact@anneisaksson.art</span>
+      </a>
+    </div>
+  </section>
+{% endblock %}
+{% block scripts %}
+  <script type="text/javascript" src="{{ baseUrl }}/assets/js/main.js"></script>
+{% endblock %}

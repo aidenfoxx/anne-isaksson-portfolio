@@ -1,0 +1,22 @@
+{% extends './main.twig' %}
+{% block links %}
+  <a href="{{ baseUrl }}" title="Home">Return Home</a>
+{% endblock %}
+{% block content %}
+  <section id="auth" class="section">
+    <div class="container">
+      {% include './errors.twig' %}
+      <h1>Authentication</h1>
+      <p>Enter your login details below to authenticate.</p>
+      <form method="POST">
+        <label>
+          <input type="text" name="username" placeholder="Username" value="{{ username != null ? username : '' }}" />
+        </label>
+        <label>
+          <input type="password" name="password" placeholder="Password" />
+        </label>
+        <button name="auth" class="full-width">Submit</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

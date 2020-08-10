@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /$
+Allow: /robots.txt
+Allow: /sitemap.xml
+Disallow: /
+
+Sitemap: https://www.anneisaksson.art/sitemap.xml

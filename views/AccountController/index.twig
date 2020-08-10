@@ -1,0 +1,69 @@
+{% extends './main.twig' %}
+{% block links %}
+  <a href="{{ baseUrl }}" title="Home">Return Home</a>
+{% endblock %}
+{% block content %}
+  <section id="account" class="section">
+    <div class="container">
+      {% include './errors.twig' %}
+      <h1>Carousel Slides</h1>
+      <p>Manage and upload carousel slides using the options below.</p>
+      <form method="POST" enctype="multipart/form-data">
+        <table>
+          <thead>
+            <tr>
+              <th>Thumbnail</th>
+              <th>Title</th>
+              <th class="align-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for slide in slides %}
+              <tr>
+                <td>
+                  <img src="{{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_thumb.{{ slide.getExtension() }}" title="{{ slide.getTitle() }}" />
+                </td>
+                <td>{{ slide.getTitle() }}</td>
+                <td class="align-center">
+                  <input type="hidden" name="positions[]" value="{{ slide.getId() }}" />
+                  <button name="increment" value="{{ slide.getId() }}">
+                    <img src="{{ baseUrl }}/assets/img/icons/up.svg" />
+                  </button>
+                  <button name="decrement" value="{{ slide.getId() }}">
+                    <img src="{{ baseUrl }}/assets/img/icons/down.svg" />
+                  </button>
+                  <button name="remove" value="{{ slide.getId() }}" data-remove>
+                    <img src="{{ baseUrl }}/assets/img/icons/trash.svg" />
+                  </button>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td class="align-center" colspan="3">
+                  <em>No slides available!</em>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>
+                <input id="select-image" type="file" name="image" style="display: none;" />
+                <a onClick="document.getElementById('select-image').click();" class="button full-width" title="Select File">Select File</a>
+              </td>
+              <td>
+                <input type="text" name="title" placeholder="Title" />
+              </td>
+              <td>
+                <button name="upload" class="full-width">Add</button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </form>
+    </div>
+  </section>
+{% endblock %}
+{% block scripts %}
+  <script type="text/javascript" src="{{ baseUrl }}/assets/js/account.js"></script>
+{% endblock %}

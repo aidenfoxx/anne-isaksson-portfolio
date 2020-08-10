@@ -1,0 +1,24 @@
+{
+  "name": "phoxx-mvc",
+  "description": "phoxx-mvc",
+  "type": "project",
+  "license": "proprietary",
+  "config": {
+    "classmap-authoritative": true
+  },
+  "require": {
+    "phoxx-mvc/core": "dev-master"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url":  "https://github.com/phoxx-mvc/core.git"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Phoxx\\" : "app"
+    },
+    "files": ["bootstrap.php"]
+  }
+}
