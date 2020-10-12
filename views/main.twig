@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Anne Isaksson - {{ title }}</title>
+  <title>Anne Isaksson - Digital Portfolio</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Artist for hire specializing in concept art, illustration, UI and animation. Currently working freelance in Stockholm, Sweden.">
+  <meta name="description" content="Artist for hire specializing in concept art, illustration, UI and animation. Currently working freelance in Stockholm, Sweden." />
+  <meta property="og:title" content="Anne Isaksson - Digital Portfolio">
+  <meta property="og:description" content="Digital portfolio of Swedish 2D artist, Anne Isaksson.">
+  <meta property="og:url" content="{{ baseUrl }}">
+  {% if slides is not empty %}
+    <meta property="og:image" content="{{ baseUrl }}/assets/upload/{{ slides[0].getFileName() }}_medium.{{ slides[0].getExtension() }}">
+    <meta name="twitter:card" content="summary_large_image">
+  {% endif %}
   <link rel="canonical" href="{{ baseUrl }}" />
   <link rel="stylesheet" type="text/css"  href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" />
   <link rel="stylesheet" type="text/css" href="{{ baseUrl }}/assets/css/main.css" />

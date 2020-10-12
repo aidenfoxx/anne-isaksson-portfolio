@@ -1,0 +1,28 @@
+{% if slides is not empty %}
+  <section id="portfolio" class="section">
+    <div class="container">
+      <div class="slider">
+        <div onClick="window.prevSlide()" class="prev">&nbsp;</div>
+        <div class="slides">
+          {% for slide in slides %}
+            <img
+              width="16"
+              height="9"
+              class="slide"
+              src="{{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_medium.{{ slide.getExtension() }}"
+              srcset="{{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_small.{{ slide.getExtension() }} 640w,
+                      {{ baseUrl }}/assets/upload/{{ slide.getFileName() }}_medium.{{ slide.getExtension() }} 1280w"
+              title="{{ slide.getTitle() }}"
+              alt="{{ slide.getTitle() }}"
+            />
+          {% endfor %}
+        </div>
+        <div onClick="window.nextSlide()" class="next">&nbsp;</div>
+      </div>
+      <div class="controls">
+        <span class="title"></span>
+        <a onClick="window.prevSlide()" rel="nofollow" title="Previous Slide">prev</a>/<a onClick="window.nextSlide()" rel="nofollow" title="Next Slide">next</a>
+      </div>
+    </div>
+  </section>
+{% endif %}
