@@ -1,3 +1,3 @@
-# Art Portfolio
+# Artist Portfolio
 
-A simple art portfolio website written with PhoxxMVC.
+A simple artist portfolio website written with PhoxxMVC.
