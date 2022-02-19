@@ -105,9 +105,6 @@ function easeOutQuart(t) {
       }
     });
   });
-
-  // NOTE: Fix for dumb Firefox bug.
-  // document.documentElement.scrollTop = document.body.scrollTop = 0;
 })();
 
 /**
