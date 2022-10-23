@@ -4,7 +4,7 @@ namespace Phoxx\Controllers;
 
 use Phoxx\Models\SlideModel;
 
-use Phoxx\Core\Controllers\Helpers\FrontController;
+use Phoxx\Core\Controllers\FrontController;
 use Phoxx\Core\Database\EntityManager;
 use Phoxx\Core\Http\Response;
 use Phoxx\Core\Renderer\View;

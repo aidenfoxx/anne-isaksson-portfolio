@@ -5,12 +5,12 @@ namespace Phoxx\Controllers;
 use Phoxx\Models\SlideModel;
 use Phoxx\Models\UserModel;
 
-use Phoxx\Core\Controllers\Helpers\FrontController;
+use Phoxx\Core\Controllers\FrontController;
 use Phoxx\Core\Database\EntityManager;
-use Phoxx\Core\File\Exceptions\FileException;
-use Phoxx\Core\File\Exceptions\ImageException;
+use Phoxx\Core\Exceptions\FileException;
+use Phoxx\Core\Exceptions\ImageException;
 use Phoxx\Core\File\Image;
-use Phoxx\Core\File\ImageManager;
+use Phoxx\Core\File\FileManager;
 use Phoxx\Core\Http\Request;
 use Phoxx\Core\Http\Response;
 use Phoxx\Core\Renderer\View;
@@ -37,22 +37,22 @@ class AccountController extends FrontController
     $fileName = uniqid();
     $filePath = PATH_PUBLIC . '/assets/upload/' . $fileName;
 
-    $imageManager = $this->getService(ImageManager::class);
+    $fileManager = $this->getService(FileManager::class);
 
-    $imageManager->convert($image, $filePath . '_thumb.jpg');
-    $imageManager->convert($image, $filePath . '_small.jpg');
-    $imageManager->convert($image, $filePath . '_medium.jpg');
-    $imageManager->convert($image, $filePath . '_large.jpg');
+    $fileManager->convert($image, $filePath . '_thumb.webp', Image::FORMAT_WEBP, null, 90);
+    $fileManager->convert($image, $filePath . '_small.webp', Image::FORMAT_WEBP, null, 90);
+    $fileManager->convert($image, $filePath . '_medium.webp', Image::FORMAT_WEBP, null, 90);
+    $fileManager->convert($image, $filePath . '_large.webp', Image::FORMAT_WEBP, null, 90);
 
-    $imageManager->resize(new Image($filePath . '_thumb.jpg'), 100, 100, Image::SCALE_COVER, null, 90);
-    $imageManager->resize(new Image($filePath . '_small.jpg'), 480, 270, Image::SCALE_COVER, null, 90);
-    $imageManager->resize(new Image($filePath . '_medium.jpg'), 1280, 720, Image::SCALE_COVER, null, 90);
-    $imageManager->resize(new Image($filePath . '_large.jpg'), 1920, 1080, Image::SCALE_COVER, null, 90);
+    $fileManager->resize(new Image($filePath . '_thumb.webp'), 100, 100, Image::SCALE_COVER, null, 90);
+    $fileManager->resize(new Image($filePath . '_small.webp'), 480, 270, Image::SCALE_COVER, null, 90);
+    $fileManager->resize(new Image($filePath . '_medium.webp'), 1280, 720, Image::SCALE_COVER, null, 90);
+    $fileManager->resize(new Image($filePath . '_large.webp'), 1920, 1080, Image::SCALE_COVER, null, 90);
 
     $slide = new SlideModel();
     $slide->setTitle($title);
     $slide->setFilename($fileName);
-    $slide->setExtension('jpg');
+    $slide->setExtension('webp');
 
     $entityManager = $this->getService(EntityManager::class);
     $entityManager->persist($slide);
@@ -88,6 +88,8 @@ class AccountController extends FrontController
 
   public function index(): Response
   {
+
+
     $request = $this->main();
 
     if ($this->verifyUser() === false) {
@@ -158,6 +160,7 @@ class AccountController extends FrontController
         try {
           $this->addSlide((string)$title, new Image((string)$image['tmp_name']));
         } catch (ImageException | FileException $e) {
+          error_log($e);
           $this->errors[] = 'Failed to process image.';
         }
       }

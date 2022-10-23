@@ -6,17 +6,16 @@
  * @package phoxx-mvc
  * @author  Aiden Foxx <aiden@foxx.io>
  */
-use Phoxx\Core\Framework\ServiceContainer;
-use Phoxx\Core\Http\Dispatcher;
-use Phoxx\Core\Http\Helpers\SimpleRequest;
-use Phoxx\Core\Http\RequestStack;
+use Phoxx\Core\Exceptions\ResponseException;
 use Phoxx\Core\Http\Response;
-use Phoxx\Core\Router\RouteContainer;
+use Phoxx\Core\Http\Router;
+use Phoxx\Core\Http\ServerRequest;
+use Phoxx\Core\System\Services;
 
-define('PATH_BASE', realpath(__DIR__.'/..'));
-define('PATH_CACHE', realpath(PATH_BASE.'/cache'));
-define('PATH_VENDOR', realpath(PATH_BASE.'/vendor'));
-define('PATH_PUBLIC', realpath(PATH_BASE.'/public'));
+define('PATH_PUBLIC', __DIR__);
+define('PATH_BASE', realpath(__DIR__ . '/..'));
+define('PATH_CACHE', realpath(PATH_BASE . '/cache'));
+define('PATH_VENDOR', realpath(PATH_BASE . '/vendor'));
 
 /**
  * Register application.
@@ -28,45 +27,57 @@ function register_bootstrap(callable $callback) {
   $bootstrap[] = $callback;
 }
 
-require PATH_VENDOR.'/autoload.php';
+require PATH_VENDOR . '/autoload.php';
 
 /**
  * Initialize application.
  */
-$routeContainer = new RouteContainer();
-$serviceContainer = new ServiceContainer();
-$dispatcher = new Dispatcher($routeContainer, $serviceContainer, new RequestStack());
+function send_response(Response $response) {
+  if (headers_sent()) {
+    throw new ResponseException('Response headers already sent.');
+  }
+
+  http_response_code($response->getStatus());
+
+  foreach ($response->getHeaders() as $name => $value) {
+    header($name . ': ' . $value);
+  }
+
+  echo $response->getContent();
+}
+
+$services = new Services();
+$router = new Router($services);
 
 error_reporting(0);
 
-set_exception_handler(function () use ($dispatcher) {
-  http_response_code(500);
+set_exception_handler(function (Throwable $e) use ($router) {
+  error_log($e);
 
-  if (($response = $dispatcher->dispatch(new SimpleRequest('_500_'))) instanceof Response) {
-    $dispatcher->send($response);
+  if (($response = $router->dispatch(new ServerRequest('_500_'))) instanceof Response) {
+    send_response($response);
     exit;
   }
+
+  http_response_code(500);
 
   echo '<h1>Error 500</h1><p>An unknown error has occured.</p>';
 });
 
 foreach ($bootstrap as $callback) {
-  $callback($routeContainer, $serviceContainer);
+  $callback($router, $services);
 }
 
-/**
- * Dispatch request.
- */
-if (($response = $dispatcher->dispatch(new SimpleRequest($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']))) instanceof Response) {
-  $dispatcher->send($response);
+if (($response = $router->dispatch(new ServerRequest($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']))) instanceof Response) {
+  send_response($response);
+  exit;
+}
+
+if (($response = $router->dispatch(new ServerRequest('_404_'))) instanceof Response) {
+  send_response($response);
   exit;
 }
 
 http_response_code(404);
-
-if (($response = $dispatcher->dispatch(new SimpleRequest('_404_'))) instanceof Response) {
-  $dispatcher->send($response);
-  exit;
-}
 
 echo '<h1>Error 404</h1><p>The requested page could not be found.</p>';

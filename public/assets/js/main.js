@@ -74,20 +74,38 @@ function easeOutQuart(t) {
     slides[i].style.width = (100 / slides.length) + '%';
   }
 
-  function updateSlide() {
-    slideTitle.innerText = slides[activeSlide].getAttribute('title');
-    slideContainer.style.marginLeft = '-' + (activeSlide * 100) + '%';
-  }
+  const scrollInterval = setInterval(() => {
+    window.nextSlide(true);
+  }, 3000);
 
-  window.nextSlide = function() {
+  slideContainer.addEventListener('click', () => {
+    clearInterval(scrollInterval);
+  });
+
+  slideContainer.addEventListener('mouseover', () => {
+    clearInterval(scrollInterval);
+  });
+
+  window.nextSlide = function(autoScroll) {
+    if (!autoScroll) {
+      clearInterval(scrollInterval);
+    }
     activeSlide = activeSlide < slides.length - 1 ? activeSlide + 1 : 0;
     updateSlide();
   };
 
-  window.prevSlide = function() {
+  window.prevSlide = function(autoScroll) {
+    if (!autoScroll) {
+      clearInterval(scrollInterval);
+    }
     activeSlide = activeSlide > 0 ? activeSlide - 1 : slides.length - 1;
     updateSlide();
   };
+
+  function updateSlide() {
+    slideTitle.innerText = slides[activeSlide].getAttribute('title');
+    slideContainer.style.marginLeft = '-' + (activeSlide * 100) + '%';
+  }
 
   updateSlide();
 })();

@@ -1,6 +1,5 @@
 {
-  "name": "phoxx-mvc",
-  "description": "phoxx-mvc",
+  "name": "phoxx/phoxx-mvc",
   "type": "project",
   "license": "proprietary",
   "config": {
